@@ -76,3 +76,10 @@
   background: rgba(30, 60, 114, 0.2);
   color: inherit;
 }
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}

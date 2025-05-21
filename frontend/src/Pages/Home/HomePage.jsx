@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from '../../components/ChatMessage';
 import './HomePage.css';
+import baIcon from '../../assets/BA_icon.png';
 
 const HomePage = () => {
   const [messages, setMessages] = useState([]);
@@ -33,7 +34,7 @@ const HomePage = () => {
       // Simulate bot response (replace with actual API call)
       setTimeout(() => {
         const botMessage = {
-          text: 'Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?',
+          text: 'Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?',
           isUser: false,
         };
         setMessages((prev) => [...prev, botMessage]);
@@ -56,9 +57,12 @@ const HomePage = () => {
     <div className="chat-container">
       <header className="chat-header">
         <div className="header-left">
-          <h1>
-            <span className="bot-icon">🤖</span>
-            BA Tutor
+          {' '}
+          <h1 className="header-title">
+            <div className="bot-icon">
+              <img src={baIcon} alt="BA Tutor" className="bot-icon-image" />
+            </div>
+            <span>BA Tutor</span>
           </h1>
         </div>
         <div className="header-right">
@@ -103,6 +107,10 @@ const HomePage = () => {
           </button>
         </form>
       </div>
+
+      <footer className="chat-footer">
+        <p>BA Tutor có thể lỗi, cần kiểm tra lại thông tin</p>
+      </footer>
     </div>
   );
 };
