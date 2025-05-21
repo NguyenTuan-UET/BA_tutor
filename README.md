@@ -1,5 +1,9 @@
 # BA_tutor
 
+## Mô tả dự án
+
+Dự án BA_tutor là một ứng dụng hỏi đáp sử dụng Gemini và ChromaDB để cung cấp thông tin và hỗ trợ học tập trong lĩnh vực tài chính.
+
 ## Yêu cầu
 
 - Python 3.10 trở lên

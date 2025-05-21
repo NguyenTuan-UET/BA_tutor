@@ -10,6 +10,10 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
 build/
 develop-eggs/
 dist/
@@ -51,18 +55,33 @@ coverage.xml
 # mypy
 .mypy_cache/
 .dmypy.json
+dmypy.json
 
 # VS Code
 .vscode/
 
-# Local env files
-.env
-.env.*
+# IDEs & editors
+*.sublime-project
+*.sublime-workspace
+.idea/
 
-# ChromaDB and database files
+# Local env files
+# .env
+# .env.*
+# *.env.local
+# .envrc
+
+# Logs
+*.log
+logs/
+log/
+
+# ChromaDB and other DBs
 chroma_db/
 core/chroma_db/
 *.sqlite3
+*.db
+*.db-journal
 
 # Frontend
 frontend/node_modules/
@@ -86,7 +105,20 @@ backend/coverage/
 # Ignore temp files
 *~
 *.tmp
+*.temp
 *.swp
+*.bak
 
 # Ignore test temp files
 test/tempCodeRunnerFile.py
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Additions
+*.orig

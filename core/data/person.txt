@@ -1,1 +1,34 @@
-nguyễn quang tuấn là sinh viên học viện ngân hàng hà nội, học khoa tài chính, đẹp trai 😉!!!
+Nguyễn Văn An là sinh viên Học viện Ngân hàng, khoa Tài chính.
+Trần Thị Bình là sinh viên Đại học Kinh tế Quốc dân, khoa Kế toán.
+Phạm Văn Cường là sinh viên Đại học Thương mại, khoa Quản trị kinh doanh.
+Lê Thị Dung là sinh viên Học viện Tài chính, khoa Tài chính doanh nghiệp.
+Hoàng Văn Đức là sinh viên Đại học Ngoại thương, khoa Kinh tế đối ngoại.
+Vũ Thị Hạnh là sinh viên Đại học Bách Khoa Hà Nội, khoa Công nghệ thông tin.
+Nguyễn Minh Hiếu là sinh viên Học viện Ngân hàng, khoa Ngân hàng.
+Đỗ Thị Hoa là sinh viên Đại học Lao động Xã hội, khoa Công tác xã hội.
+Trần Văn Hoàng là sinh viên Đại học Kinh tế TP.HCM, khoa Tài chính công.
+Lê Thị Huyền là sinh viên Đại học Thương mại, khoa Marketing.
+
+Phan Văn Hùng là sinh viên Học viện Tài chính, khoa Kiểm toán.
+Đào Thị Lan là sinh viên Đại học Kinh tế Quốc dân, khoa Kinh tế phát triển.
+Ngô Văn Long là sinh viên Học viện Ngân hàng, khoa Hệ thống thông tin quản lý.
+Trần Thị Mai là sinh viên Đại học Mở Hà Nội, khoa Kinh tế học.
+Nguyễn Văn Minh là sinh viên Đại học Ngoại thương, khoa Kinh doanh quốc tế.
+Lê Thị Nga là sinh viên Đại học Bách Khoa Hà Nội, khoa Cơ điện tử.
+Đỗ Minh Nhật là sinh viên Đại học Kinh tế Quốc dân, khoa Khoa học quản lý.
+Vũ Thị Nhung là sinh viên Học viện Ngân hàng, khoa Kế toán.
+Hoàng Văn Phong là sinh viên Đại học Thương mại, khoa Kinh tế số.
+Nguyễn Thị Quỳnh là sinh viên Học viện Tài chính, khoa Thuế.
+
+Trần Văn Quang là sinh viên Đại học Kinh tế TP.HCM, khoa Quản trị nhân lực.
+Đặng Thị Sen là sinh viên Đại học Lao động Xã hội, khoa Bảo hiểm.
+Nguyễn Văn Sơn là sinh viên Đại học Ngoại thương, khoa Tài chính quốc tế.
+Phạm Thị Thảo là sinh viên Học viện Ngân hàng, khoa Ngân hàng số.
+Trần Minh Thiện là sinh viên Đại học Kinh tế Quốc dân, khoa Thống kê kinh tế.
+Lê Thị Thu là sinh viên Đại học Thương mại, khoa Quản lý chuỗi cung ứng.
+Vũ Văn Toàn là sinh viên Học viện Ngân hàng, khoa Kinh tế đầu tư.
+Ngô Thị Trang là sinh viên Đại học Mở Hà Nội, khoa Luật.
+Phan Văn Trường là sinh viên Đại học Bách Khoa Hà Nội, khoa Điện tử viễn thông.
+Nguyễn Thị Tuyết là sinh viên Đại học Ngoại thương, khoa Kinh tế quốc tế.
+
+Nguyễn Quang Tuấn là sinh viên đại học Công nghệ, khoa Công nghệ thông tin 
