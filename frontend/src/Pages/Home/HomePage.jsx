@@ -21,7 +21,6 @@ const HomePage = () => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
 
-    // Add user message
     const userMessage = {
       text: inputMessage,
       isUser: true,
@@ -31,17 +30,23 @@ const HomePage = () => {
     setIsTyping(true);
 
     try {
-      // Simulate bot response (replace with actual API call)
-      setTimeout(() => {
-        const botMessage = {
-          text: 'Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?Xin chào! Tôi là BA Tutor, tôi có thể giúp gì cho bạn?',
-          isUser: false,
-        };
-        setMessages((prev) => [...prev, botMessage]);
-        setIsTyping(false);
-      }, 1000);
+      const response = await fetch('http://localhost:3001/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: inputMessage }),
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const data = await response.json();
+      const botMessage = {
+        text: data.answer,
+        isUser: false,
+      };
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error('Error:', error);
+    } finally {
       setIsTyping(false);
     }
   };
@@ -94,7 +99,7 @@ const HomePage = () => {
             className="chat-input"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress} // ✅ dùng onKeyDown, không dùng onKeyPress
             placeholder="Nhập tin nhắn của bạn..."
             rows="1"
           />
