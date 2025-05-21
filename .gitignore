@@ -61,9 +61,27 @@ coverage.xml
 
 # ChromaDB and database files
 chroma_db/
+core/chroma_db/
+*.sqlite3
 
-# Frontend build
+# Frontend
 frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+frontend/build/
+frontend/coverage/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/.env.*
+backend/dist/
+backend/build/
+backend/coverage/
 
 # Ignore temp files
 *~
