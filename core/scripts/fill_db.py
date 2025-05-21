@@ -9,7 +9,7 @@ from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, T
 load_dotenv()
 
 # Đường dẫn tuyệt đối tới thư mục data
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DATA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("DATA_DIR")))
 CHROMA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("CHROMA_DIR")))
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")

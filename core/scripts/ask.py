@@ -7,12 +7,12 @@ import google.generativeai as genai
 
 # Load environment
 load_dotenv()
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 MODEL = os.getenv("MODEL_CHATBOT")
 CHROMA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("CHROMA_DIR")))
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
-TOP_K = int(os.getenv("TOP_K", 3))
+TOP_K = int(os.getenv("TOP_K"))
 SYSTEM_PROMPT_FILE = os.path.abspath(os.path.join(BASE_DIR, os.getenv("SYSTEM_PROMPT_FILE")))
 
 # Cấu hình Gemini
