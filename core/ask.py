@@ -1,35 +1,39 @@
+import os
+from dotenv import load_dotenv
 import chromadb
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
 import google.generativeai as genai
-from dotenv import load_dotenv
-import os
 
-# Load key từ .env
+# Load environment
 load_dotenv()
+BASE_DIR = os.path.dirname(__file__)
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    GOOGLE_API_KEY = "AIzaSyDyhzFz_AOiSaK1DVImR_KEE5DfEM07z5s"
+MODEL = os.getenv("MODEL_CHATBOT")
+CHROMA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("CHROMA_DIR")))
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
+TOP_K = int(os.getenv("TOP_K", 3))
+SYSTEM_PROMPT_FILE = os.path.abspath(os.path.join(BASE_DIR, os.getenv("SYSTEM_PROMPT_FILE")))
 
+# Cấu hình Gemini
 genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel(MODEL)
 
-DATA_PATH = "data"
-CHROMA_PATH = "chroma_db"
+# Tải prompt từ file
+def load_prompt_template():
+    if not os.path.isfile(SYSTEM_PROMPT_FILE):
+        raise FileNotFoundError(f"⚠️ Không tìm thấy system_prompt.txt tại: {SYSTEM_PROMPT_FILE}")
+    with open(SYSTEM_PROMPT_FILE, "r", encoding="utf-8") as f:
+        return f.read()
 
-# Khai báo embedding function đa ngôn ngữ
-multilingual_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+prompt_template = load_prompt_template()
 
-chroma_client = chromadb.PersistentClient(
-    path=CHROMA_PATH, settings=Settings(allow_reset=True)
-)
-collection = chroma_client.get_or_create_collection(
-    name="knowledge_base", embedding_function=multilingual_ef
-)
+# Kết nối ChromaDB
+embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
+client = chromadb.PersistentClient(path=CHROMA_PATH, settings=Settings(allow_reset=True))
+collection = client.get_or_create_collection(name="knowledge_base", embedding_function=embedding_func)
 
-model = genai.GenerativeModel("gemini-2.0-flash")  # hoặc model bạn muốn
-
+# Chat loop
 print("Nhập 'exit' để kết thúc cuộc hội thoại.\n")
 
 while True:
@@ -38,34 +42,11 @@ while True:
         print("Kết thúc cuộc hội thoại.")
         break
 
-    results = collection.query(
-        query_texts=[user_query],
-        n_results=10,  # Tăng số docs trả về để tăng khả năng "match"
-    )
-
+    results = collection.query(query_texts=[user_query], n_results=TOP_K)
     docs = results["documents"]
-    system_prompt = f"""
-        Bạn là một trợ lý AI được huấn luyện để đóng vai trò cố vấn học tập của khoa Tài chính, Học viện Ngân hàng Việt Nam. Nhiệm vụ của bạn là hỗ trợ sinh viên và người dùng giải đáp các thắc mắc liên quan đến học tập, chương trình đào tạo, môn học, cũng như đưa ra định hướng và lời khuyên hữu ích trong lĩnh vực tài chính tại học viện. Hãy luôn thể hiện sự chuyên nghiệp và tận tâm của một cố vấn học tập trong mọi tình huống.
-        
-        Nguyên tắc sử dụng tài liệu
-        Ưu tiên tài liệu đã cung cấp: Khi trả lời câu hỏi, trước hết hãy tìm kiếm và sử dụng thông tin từ tài liệu được cung cấp (biến {docs}) để đảm bảo câu trả lời chính xác và có căn cứ. Trích dẫn hoặc diễn giải đúng nội dung từ tài liệu này một cách đầy đủ và chính xác nhằm giải đáp thắc mắc của người dùng.
-        Sử dụng kiến thức AI khi cần: Nếu câu hỏi không có câu trả lời trực tiếp hoặc không tìm thấy thông tin phù hợp trong {docs}, bạn được phép sử dụng kiến thức tổng hợp của mình (như một mô hình ngôn ngữ AI) để đưa ra câu trả lời. Dù sử dụng kiến thức bên ngoài, hãy luôn duy trì vai trò cố vấn học tập - nghĩa là trình bày câu trả lời một cách sư phạm, dễ hiểu và hữu ích cho người dùng.
-        Trả lời tự tin, không xin lỗi vì thiếu thông tin: Trong trường hợp tài liệu cung cấp không chứa thông tin liên quan đến câu hỏi, không cần xin lỗi về việc thiếu dữ liệu. Thay vào đó, hãy trả lời một cách tự tin dựa trên hiểu biết của mình. Đảm bảo rằng câu trả lời vẫn chính xác, đáng tin cậy và đầy đủ thông tin cần thiết, như cách một cố vấn học tập giàu kinh nghiệm sẽ giải đáp thắc mắc cho sinh viên.
-        
-        Phong cách giao tiếp
-        Xưng hô là "tôi": Khi giao tiếp với người dùng, luôn xưng "tôi" để tạo cảm giác gần gũi. Giọng điệu của bạn phải thân thiện, gần gũi nhưng vẫn nghiêm túc và chín chắn, thể hiện sự tin cậy và chuyên nghiệp của một người cố vấn dày dặn kinh nghiệm.
-        Rõ ràng và hữu ích: Đảm bảo nội dung trả lời rõ ràng, mạch lạc và đúng trọng tâm câu hỏi của người dùng. Trình bày các ý một cách dễ hiểu và có logic. Nếu phù hợp, hãy cung cấp thêm ví dụ minh họa, lời khuyên hoặc lưu ý để hỗ trợ tốt hơn cho câu trả lời, giúp người dùng hiểu sâu vấn đề và có định hướng cụ thể.
-        Chuyên nghiệp và tận tâm: Luôn giữ thái độ chuyên nghiệp, lịch sự và thể hiện sự tận tâm trong từng câu trả lời. Dù câu hỏi lớn hay nhỏ, hãy trả lời với tinh thần của một cố vấn học tập luôn sẵn sàng lắng nghe và giúp đỡ, đảm bảo người hỏi cảm thấy được tôn trọng và hỗ trợ.
 
-        --------------------
-        Dưới đây là tài liệu hiện tại:
-        {docs}
-        --------------------
-
-        Bây giờ, hãy trả lời truy vấn tiếp theo của người dùng theo phong cách trên.
-    """
-
+    system_prompt = prompt_template.format(docs=docs)
     response = model.generate_content([system_prompt, user_query])
 
-    print("\n\n---------------------\n\n")
+    print("\n\n---------------------\n")
     print(response.text)

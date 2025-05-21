@@ -1,62 +1,43 @@
-from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader
-import chromadb
+import os
+from dotenv import load_dotenv
+from chromadb import PersistentClient
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
-import os
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader
 
-multilingual_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+# Load env from .env
+load_dotenv()
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), "data")
-CHROMA_PATH = "chroma_db"
+# Đường dẫn tuyệt đối tới thư mục data
+BASE_DIR = os.path.dirname(__file__)
+DATA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("DATA_DIR")))
+CHROMA_PATH = os.path.abspath(os.path.join(BASE_DIR, os.getenv("CHROMA_DIR")))
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
 
-chroma_client = chromadb.PersistentClient(
-    path=CHROMA_PATH,
-    settings=Settings(allow_reset=True)
-)
-if "knowledge_base" in [c.name for c in chroma_client.list_collections()]:
-    chroma_client.delete_collection("knowledge_base")
+# Check thư mục data tồn tại
+if not os.path.isdir(DATA_PATH):
+    raise FileNotFoundError(f"❌ Không tìm thấy thư mục dữ liệu: {DATA_PATH}")
 
-collection = chroma_client.get_or_create_collection(
-    name="knowledge_base",
-    embedding_function=multilingual_ef
-)
+# Embedding
+embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
 
-# Load PDF
-pdf_loader = DirectoryLoader(
-    DATA_PATH,
-    glob="*.pdf",
-    loader_cls=PyPDFLoader
-)
-pdf_documents = pdf_loader.load()
-print(f"Số file PDF nạp: {len(pdf_documents)}")
+# Khởi tạo client
+client = PersistentClient(path=CHROMA_PATH, settings=Settings(allow_reset=True))
 
-# Load TXT
-txt_loader = DirectoryLoader(
-    DATA_PATH,
-    glob="*.txt",
-    loader_cls=TextLoader,
-    loader_kwargs={"encoding": "utf-8"}
-)
-txt_documents = txt_loader.load()
-print(f"Số file TXT nạp: {len(txt_documents)}")
+# Reset collection nếu đã tồn tại
+if "knowledge_base" in [c.name for c in client.list_collections()]:
+    client.delete_collection("knowledge_base")
 
-if txt_documents:
-    print("Nội dung file TXT đầu tiên:", txt_documents[0].page_content)
+collection = client.get_or_create_collection(name="knowledge_base", embedding_function=embedding_func)
 
-# Gộp lại
-raw_documents = pdf_documents + txt_documents
-print(f"Tổng số tài liệu (PDF+TXT): {len(raw_documents)}")
+# Load tài liệu
+pdf_docs = DirectoryLoader(DATA_PATH, glob="*.pdf", loader_cls=PyPDFLoader).load()
+txt_docs = DirectoryLoader(DATA_PATH, glob="*.txt", loader_cls=TextLoader, loader_kwargs={"encoding": "utf-8"}).load()
 
-# KHÔNG SPLIT, chỉ upsert từng tài liệu luôn
-documents = [doc.page_content for doc in raw_documents]
-metadata = [doc.metadata for doc in raw_documents]
-ids = [f"ID{i}" for i in range(len(raw_documents))]
+all_docs = pdf_docs + txt_docs
+documents = [doc.page_content for doc in all_docs]
+metadata = [doc.metadata for doc in all_docs]
+ids = [f"id{i}" for i in range(len(all_docs))]
 
-collection.upsert(
-    documents=documents,
-    metadatas=metadata,
-    ids=ids
-)
-print("Đã nạp dữ liệu PDF & TXT (không split) vào ChromaDB!")
+collection.upsert(documents=documents, metadatas=metadata, ids=ids)
+print(f"✅ Đã nạp {len(all_docs)} tài liệu (PDF+TXT) vào ChromaDB.")
