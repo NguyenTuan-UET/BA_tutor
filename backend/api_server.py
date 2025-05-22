@@ -77,10 +77,10 @@ def health():
 
 
 # === Khởi chạy server ===
-if __name__ == "__main__":
-    import os
+# if __name__ == "__main__":
+#     import os
 
-    port = int(
-        os.environ.get("PORT", 10000)
-    )  # Lấy PORT từ môi trường do Render cung cấp
-    uvicorn.run("backend.api_server:app", host="0.0.0.0", port=port)
+#     port = int(
+#         os.environ.get("PORT", 10000)
+#     )  # Lấy PORT từ môi trường do Render cung cấp
+#     uvicorn.run("backend.api_server:app", host="0.0.0.0", port=port)
