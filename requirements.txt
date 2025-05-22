@@ -1,4 +1,7 @@
-google-generativeai
+fastapi
+uvicorn
+python-dotenv
 chromadb
+google-generativeai
 langchain-community
 sentence-transformers

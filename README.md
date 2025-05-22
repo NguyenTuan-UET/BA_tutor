@@ -1,69 +1,84 @@
-# BA_tutor
+# BA_tutor: AI Hỗ Trợ Học Tập Ngành Tài Chính
 
-## Mô tả dự án
+## Giới thiệu dự án
 
-Dự án BA_tutor là một ứng dụng hỏi đáp sử dụng Gemini và ChromaDB để cung cấp thông tin và hỗ trợ học tập trong lĩnh vực tài chính.
+**BA_tutor** là một hệ thống hỏi đáp ứng dụng AI, sử dụng mô hình Gemini của Google và cơ sở tri thức ChromaDB để hỗ trợ sinh viên ngành Tài chính, đặc biệt là sinh viên Học viện Ngân hàng. Dự án hướng tới việc cung cấp một trợ lý học tập thông minh, giúp giải đáp thắc mắc về chương trình đào tạo, môn học, tài liệu, cũng như đưa ra lời khuyên hữu ích cho sinh viên.
 
-## Yêu cầu
+### Định hướng và vai trò của AI trong dự án
 
-- Python 3.10 trở lên
-- Đã cài đặt các package cần thiết (xem bên dưới)
-- Đã có API key Gemini (Google Generative AI)
+- **Cá nhân hóa học tập:** AI giúp sinh viên tiếp cận thông tin nhanh chóng, chính xác, phù hợp với nhu cầu từng cá nhân.
+- **Tăng hiệu quả tự học:** Hỗ trợ giải đáp các câu hỏi về kiến thức chuyên ngành, tài liệu, quy chế, định hướng nghề nghiệp.
+- **Tiết kiệm thời gian:** Tìm kiếm thông tin từ kho dữ liệu lớn chỉ trong vài giây.
+- **Hỗ trợ giảng viên:** Có thể mở rộng để hỗ trợ giảng viên trong việc xây dựng tài liệu, kiểm tra kiến thức sinh viên.
 
-## Cài đặt thư viện
+---
 
-Cài đặt các thư viện cần thiết bằng pip:
+## Hướng dẫn cài đặt và chạy dự án
 
-```bash
-pip install -r requirements.txt
-```
+### 1. Yêu cầu hệ thống
 
-## Thiết lập API Key
+- Python >= 3.10
+- Node.js & npm (để chạy frontend)
 
-Tạo file `core/.env` hoặc chỉnh sửa file `core/config.py` để chứa biến môi trường:
+### 2. Cài đặt backend
 
-```
-GEMINI_API_KEY=your_google_gemini_api_key
-```
+1. Cài đặt các thư viện Python:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Tạo file `.env` ở thư mục gốc dự án với nội dung mẫu:
+   ```env
+   GOOGLE_API_KEY=your_google_gemini_api_key
+   MODEL_CHATBOT=gemini-1.0-pro
+   EMBEDDING_MODEL=all-MiniLM-L6-v2
+   CHROMA_DIR=chroma_db
+   SYSTEM_PROMPT_FILE=system_prompt.txt
+   TOP_K=3
+   ```
+3. Chuẩn bị dữ liệu: Đặt các file tài liệu (PDF, TXT) vào `core/data/`.
+4. Khởi tạo database ChromaDB:
+   ```bash
+   python backend/fill_database.py
+   ```
+5. Chạy server API:
+   ```bash
+   uvicorn backend.api_server:app --reload --port 3001
+   ```
 
-Hoặc sửa trực tiếp trong code nếu cần.
+### 3. Cài đặt và chạy frontend
 
-## Hướng dẫn chạy các chức năng chính
+1. Di chuyển vào thư mục frontend:
+   ```bash
+   cd frontend
+   ```
+2. Cài đặt dependencies:
+   ```bash
+   npm install
+   ```
+3. Chạy ứng dụng:
+   ```bash
+   npm run dev
+   ```
+4. Truy cập: [http://localhost:5173/](http://localhost:5173/)
 
-### 1. Tạo database Chroma từ tài liệu (index dữ liệu)
-
-Chạy lệnh sau để nạp dữ liệu PDF và TXT vào ChromaDB:
-
-```bash
-python core/fill_db.py
-```
-
-### 2. Chatbot Gemini CLI (hỏi đáp trực tiếp với Gemini)
-
-Chạy chatbot CLI với Gemini:
-
-```bash
-python core/scripts/rag_qa.py
-```
-
-Sau đó nhập câu hỏi, nhấn Enter để nhận câu trả lời.
-
-### 3. Test chatbot Gemini CLI (bản test)
+### 4. Hỏi đáp trực tiếp với Gemini (CLI, tùy chọn)
 
 ```bash
 python test/gemini_cli.py
 ```
 
-## Lưu ý
+---
 
-- Thư mục `chroma_db/` sẽ được tạo tự động để lưu trữ dữ liệu đã index, không cần push lên GitHub.
-- Nếu gặp lỗi về model Gemini, hãy xem tên model khả dụng khi chạy script và sửa lại tên model trong code cho phù hợp.
-- Đảm bảo các file dữ liệu (PDF, TXT) nằm trong `core/data/`.
+## Thư mục quan trọng
 
-## Bỏ qua các file/thư mục không cần thiết khi push
-
-Đã cấu hình `.gitignore` để loại trừ `chroma_db/` và `frontend/node_modules/`.
+- `backend/`: Chứa mã nguồn backend (API, xử lý dữ liệu, kết nối AI)
+- `core/data/`: Lưu trữ tài liệu, dữ liệu đầu vào
+- `chroma_db/`: Cơ sở dữ liệu vector hóa (tự động tạo, không cần push lên git)
+- `frontend/`: Mã nguồn giao diện web
 
 ---
 
-Nếu có vấn đề, hãy kiểm tra lại API key, đường dẫn dữ liệu, hoặc liên hệ người phát triển: nqt.code@gmail.com
+## Liên hệ & đóng góp
+
+- Email: nqt.code@gmail.com
+- Đóng góp ý tưởng, tài liệu, phản hồi đều được hoan nghênh!
