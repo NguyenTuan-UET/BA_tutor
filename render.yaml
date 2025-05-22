@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: batutor-api
+    env: python
+    buildCommand: ""
+    startCommand: uvicorn backend.api_server:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: GOOGLE_API_KEY
+        value: your_gemini_api_key
+      - key: MODEL_CHATBOT
+        value: gemini-pro
+      - key: CHROMA_DIR
+        value: chroma_db
+      - key: EMBEDDING_MODEL
+        value: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+      - key: SYSTEM_PROMPT_FILE
+        value: core/system_prompt.txt
+      - key: TOP_K
+        value: "4"
