@@ -52,6 +52,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # === Endpoint hỏi/đáp ===
 @app.post("/api/ask")
 async def ask_api(request: Request):
@@ -68,11 +69,18 @@ async def ask_api(request: Request):
     response = model.generate_content([system_prompt, user_query])
     return {"answer": response.text.strip()}
 
+
 # === Endpoint kiểm tra tình trạng ===
 @app.get("/api/health")
 def health():
     return {"status": "ok"}
 
+
 # === Khởi chạy server ===
 if __name__ == "__main__":
-    uvicorn.run("backend.api_server:app", host="0.0.0.0", port=3001, reload=True)
+    import os
+
+    port = int(
+        os.environ.get("PORT", 10000)
+    )  # Lấy PORT từ môi trường do Render cung cấp
+    uvicorn.run("backend.api_server:app", host="0.0.0.0", port=port)
