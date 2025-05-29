@@ -77,10 +77,6 @@ def health():
 
 
 # === Khởi chạy server ===
-# if __name__ == "__main__":
-#     import os
-
-#     port = int(
-#         os.environ.get("PORT", 10000)
-#     )  # Lấy PORT từ môi trường do Render cung cấp
-#     uvicorn.run("backend.api_server:app", host="0.0.0.0", port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 3001))
+    uvicorn.run("api_server:app", host="0.0.0.0", port=port, reload=True)
