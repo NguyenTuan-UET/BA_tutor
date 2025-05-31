@@ -65,9 +65,9 @@ const HomePage = () => {
           {' '}
           <h1 className="header-title">
             <div className="bot-icon">
-              <img src={baIcon} alt="BA Tutor" className="bot-icon-image" />
+              <img src={baIcon} alt="FiNABOT" className="bot-icon-image" />
             </div>
-            <span>BA Tutor</span>
+            <span>FiNABOT</span>
           </h1>
         </div>
         <div className="header-right">

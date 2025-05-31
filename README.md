@@ -1,84 +1,124 @@
-# BA_tutor: AI Hỗ Trợ Học Tập Ngành Tài Chính
+# BA_tutor - He thong tro ly AI cho sinh vien nganh Tai chinh
 
-## Giới thiệu dự án
+## Muc tieu du an
 
-**BA_tutor** là một hệ thống hỏi đáp ứng dụng AI, sử dụng mô hình Gemini của Google và cơ sở tri thức ChromaDB để hỗ trợ sinh viên ngành Tài chính, đặc biệt là sinh viên Học viện Ngân hàng. Dự án hướng tới việc cung cấp một trợ lý học tập thông minh, giúp giải đáp thắc mắc về chương trình đào tạo, môn học, tài liệu, cũng như đưa ra lời khuyên hữu ích cho sinh viên.
-
-### Định hướng và vai trò của AI trong dự án
-
-- **Cá nhân hóa học tập:** AI giúp sinh viên tiếp cận thông tin nhanh chóng, chính xác, phù hợp với nhu cầu từng cá nhân.
-- **Tăng hiệu quả tự học:** Hỗ trợ giải đáp các câu hỏi về kiến thức chuyên ngành, tài liệu, quy chế, định hướng nghề nghiệp.
-- **Tiết kiệm thời gian:** Tìm kiếm thông tin từ kho dữ liệu lớn chỉ trong vài giây.
-- **Hỗ trợ giảng viên:** Có thể mở rộng để hỗ trợ giảng viên trong việc xây dựng tài liệu, kiểm tra kiến thức sinh viên.
+**BA_tutor** la he thong hoi dap ung dung AI (Gemini, ChromaDB, NLP) ho tro sinh vien nganh Tai chinh, dac biet la sinh vien Hoc vien Ngan hang, tra cuu thong tin hoc tap, chuong trinh dao tao, mon hoc, tai lieu chuyen nganh, ... Du an giup sinh vien tiep can triet thuc nhanh chong, chinh xac, tiet kiem thoi gian va nang cao hieu qua hoc tap.
 
 ---
 
-## Hướng dẫn cài đặt và chạy dự án
+## 1. Yeu cau he thong
 
-### 1. Yêu cầu hệ thống
+- **Windows 10/11**
+- **Python 3.10+** (https://www.python.org/downloads/)
+- **Node.js & npm** (https://nodejs.org/)
+- **(Khuyen nghi) Git** (https://git-scm.com/download/win)
 
-- Python >= 3.10
-- Node.js & npm (để chạy frontend)
+---
 
-### 2. Cài đặt backend
+## 2. Cai dat backend
 
-1. Cài đặt các thư viện Python:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Tạo file `.env` ở thư mục gốc dự án với nội dung mẫu:
-   ```env
-   GOOGLE_API_KEY=your_google_gemini_api_key
-   MODEL_CHATBOT=gemini-1.0-pro
-   EMBEDDING_MODEL=all-MiniLM-L6-v2
-   CHROMA_DIR=chroma_db
-   SYSTEM_PROMPT_FILE=system_prompt.txt
-   TOP_K=3
-   ```
-3. Chuẩn bị dữ liệu: Đặt các file tài liệu (PDF, TXT) vào `core/data/`.
-4. Khởi tạo database ChromaDB:
-   ```bash
-   python backend/fill_database.py
-   ```
-5. Chạy server API:
-   ```bash
-   uvicorn backend.api_server:app --reload --port 3001
-   ```
+### a. Cai dat thu vien Python
 
-### 3. Cài đặt và chạy frontend
+Tai thu muc goc du an, chay:
 
-1. Di chuyển vào thư mục frontend:
-   ```bash
-   cd frontend
-   ```
-2. Cài đặt dependencies:
-   ```bash
-   npm install
-   ```
-3. Chạy ứng dụng:
-   ```bash
-   npm run dev
-   ```
-4. Truy cập: [http://localhost:5173/](http://localhost:5173/)
+```sh
+pip install -r requirements.txt
+```
 
-### 4. Hỏi đáp trực tiếp với Gemini (CLI, tùy chọn)
+### b. Tao file cau hinh moi truong `.env`
 
-```bash
-python test/gemini_cli.py
+Tao file `.env` o thu muc goc (hoac copy tu mau neu co), noi dung vi du:
+
+```
+GOOGLE_API_KEY=your_google_gemini_api_key
+MODEL_CHATBOT=gemini-1.0-pro
+CHROMA_DIR=chroma_db
+EMBEDDING_MODEL=all-MiniLM-L6-v2
+TOP_K=3
+SYSTEM_PROMPT_FILE=system_prompt.txt
+```
+
+> **Luu y:** Thay `your_google_gemini_api_key` bang API key that cua ban.
+
+---
+
+## 3. Cai dat frontend
+
+Tai thu muc goc du an, chay:
+
+```sh
+cd frontend
+npm install
+cd ..
 ```
 
 ---
 
-## Thư mục quan trọng
+## 4. Chuan bi du lieu
 
-- `backend/`: Chứa mã nguồn backend (API, xử lý dữ liệu, kết nối AI)
-- `core/data/`: Lưu trữ tài liệu, dữ liệu đầu vào
-- `chroma_db/`: Cơ sở dữ liệu vector hóa (tự động tạo, không cần push lên git)
-- `frontend/`: Mã nguồn giao diện web
+- Dat cac file tai lieu (PDF, TXT, ...) vao thu muc `core/data/`.
 
 ---
 
-## Liên hệ & đóng góp
+## 5. Tao database ChromaDB tu du lieu
 
-- Email: nqt.code@gmail.com
-- Đóng góp ý tưởng, tài liệu, phản hồi đều được hoan nghênh!
+Chay script:
+
+```sh
+upload_doc.bat
+```
+
+- Script nay se tu dong chay `fill_database.py` de tao database tu du lieu.
+
+---
+
+## 6. Khoi dong he thong
+
+Chay script:
+
+```sh
+run_all_win.bat
+```
+
+- Script nay se tu dong mo 2 cua so:
+  - Backend (http://localhost:3001)
+  - Frontend (http://localhost:3000)
+
+---
+
+## 7. Truy cap va su dung
+
+- Mo trinh duyet, vao: [http://localhost:3000](http://localhost:3000) de su dung ung dung hoi dap AI.
+
+---
+
+## 8. Mot so luu y
+
+- Neu thay doi du lieu trong `core/data/`, hay chay lai `upload_doc.bat` de cap nhat database.
+- Neu gap loi ve module hoac import, hay chac chan ban chay lenh tu dung thu muc goc du an.
+- Dam bao file `.env` da dien dung thong tin va API key con hieu luc.
+- De dung he thong, chi can dong cac cua so cmd da mo ra.
+
+---
+
+## 9. `requirements.txt` chuan cho backend
+
+```
+fastapi
+uvicorn
+python-dotenv
+chromadb
+google-generativeai
+langchain-community
+sentence-transformers
+```
+
+---
+
+## 10. Thong tin lien he
+
+Neu can ho tro, vui long lien he: nqt.code@gmail.com
+
+---
+
+**Chuc ban su dung he thong hieu qua!**
